@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Raplica.AI Chatbot</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    #chatbox { border: 1px solid #ccc; padding: 10px; height: 300px; width: 80%; margin-bottom: 10px; overflow-y: scroll; }
+    .message { margin: 5px 0; }
+    .user { color: blue; }
+    .bot { color: green; }
+  </style>
+</head>
+<body>
+  <h1>Raplica.AI Chatbot</h1>
+  <select id="role">
+    <option>Student</option>
+    <option>Teacher</option>
+    <option>Farmer</option>
+    <option>Doctor</option>
+    <option>Women</option>
+  </select>
+  <div id="chatbox"></div>
+  <input type="text" id="message" placeholder="Type your message..." style="width:70%;">
+  <button id="send">Send</button>
+  <script>
+    document.getElementById("send").onclick = function() {
+      const role = document.getElementById("role").value;
+      const msg = document.getElementById("message").value.trim();
+      if (!msg) return;
+      const chatbox = document.getElementById("chatbox");
+      chatbox.innerHTML += `<div class="message user"><strong>You:</strong> ${msg}</div>`;
+      fetch("/chat", { // Flask/FastAPI endpoint
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: msg, role: role })
+      })
+      .then(res => res.json())
+      .then(data => {
+        chatbox.innerHTML += `<div class="message bot"><strong>Bot:</strong> ${data.response}</div>`;
+        document.getElementById("message").value = "";
+        chatbox.scrollTop = chatbox.scrollHeight;
+      });
+    };
+  </script>
+</body>
+</html>
