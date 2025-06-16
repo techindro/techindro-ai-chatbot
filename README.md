@@ -1,2 +1,2 @@
-# techindro-ai-chatbot
+# Raplica-ai-chatbot
 An AI chatbot using OpenAI & Gemini APIs built by Tech Indro
